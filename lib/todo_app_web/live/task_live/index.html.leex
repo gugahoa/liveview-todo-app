@@ -1,35 +1,19 @@
-<h1>Listing Tasks</h1>
+<div class="flex flex-col items-center p-8">
+  <h1 class="text-2xl font-bold uppercase">Tasks Todo</h1>
 
-<%= if @live_action in [:new, :edit] do %>
-  <%= live_modal @socket, TodoAppWeb.TaskLive.FormComponent,
-    id: @task.id || :new,
-    title: @page_title,
-    action: @live_action,
-    task: @task,
-    return_to: Routes.task_index_path(@socket, :index) %>
-<% end %>
+  <div class="py-4 mt-12 bg-white shadow-md rounded-md w-96">
+    <form phx-change="toggle-task">
+      <ul class="w-full">
+        <%= for task <- @tasks do%>
+        <li class="flex w-full h-8 hover:bg-gray-100">
+          <label for="<%= task.id %>" class="inline-block w-full px-4 my-auto">
+            <input type="checkbox" name="<%= task.id %>" id="<%= task.id %>" <%= if task.done, do: "checked" %>>
+            <span class="w-full ml-2"><%= task.text %></span>
+          </label>
+        </li>
+        <% end %>
+      </ul>
+    </form>
+  </div>
+</div>
 
-<table>
-  <thead>
-    <tr>
-      <th>Text</th>
-
-      <th></th>
-    </tr>
-  </thead>
-  <tbody id="tasks">
-    <%= for task <- @tasks do %>
-      <tr id="task-<%= task.id %>">
-        <td><%= task.text %></td>
-
-        <td>
-          <span><%= live_redirect "Show", to: Routes.task_show_path(@socket, :show, task) %></span>
-          <span><%= live_patch "Edit", to: Routes.task_index_path(@socket, :edit, task) %></span>
-          <span><%= link "Delete", to: "#", phx_click: "delete", phx_value_id: task.id, data: [confirm: "Are you sure?"] %></span>
-        </td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
-<span><%= live_patch "New Task", to: Routes.task_index_path(@socket, :new) %></span>
