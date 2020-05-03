@@ -1,0 +1,22 @@
+<h1>Show Task</h1>
+
+<%= if @live_action in [:edit] do %>
+  <%= live_modal @socket, TodoAppWeb.TaskLive.FormComponent,
+    id: @task.id,
+    title: @page_title,
+    action: @live_action,
+    task: @task,
+    return_to: Routes.task_show_path(@socket, :show, @task) %>
+<% end %>
+
+<ul>
+
+  <li>
+    <strong>Text:</strong>
+    <%= @task.text %>
+  </li>
+
+</ul>
+
+<span><%= live_patch "Edit", to: Routes.task_show_path(@socket, :edit, @task), class: "button" %></span>
+<span><%= live_redirect "Back", to: Routes.task_index_path(@socket, :index) %></span>
