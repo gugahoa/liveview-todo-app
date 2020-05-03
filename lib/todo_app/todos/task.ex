@@ -4,6 +4,7 @@ defmodule TodoApp.Todos.Task do
 
   schema "tasks" do
     field :text, :string
+    field :done, :boolean, default: false
 
     timestamps()
   end
@@ -11,7 +12,7 @@ defmodule TodoApp.Todos.Task do
   @doc false
   def changeset(task, attrs) do
     task
-    |> cast(attrs, [:text])
+    |> cast(attrs, [:text, :done])
     |> validate_required([:text])
   end
 end

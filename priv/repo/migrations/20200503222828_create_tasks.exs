@@ -3,7 +3,8 @@ defmodule TodoApp.Repo.Migrations.CreateTasks do
 
   def change do
     create table(:tasks) do
-      add :text, :string
+      add :text, :string, null: false
+      add :done, :boolean, default: false, null: false
 
       timestamps()
     end
