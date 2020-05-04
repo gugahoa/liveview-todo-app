@@ -1,19 +1,34 @@
 <div class="flex flex-col items-center p-8">
   <h1 class="text-2xl font-bold uppercase">Tasks Todo</h1>
 
-  <div class="py-4 mt-12 bg-white shadow-md rounded-md w-96">
-    <form phx-change="toggle-task">
+  <div class="pt-2 mt-12 overflow-hidden bg-white shadow-md rounded-md w-96">
       <ul class="w-full">
-        <%= for task <- @tasks do%>
-        <li class="flex w-full h-8 hover:bg-gray-100">
-          <label for="<%= task.id %>" class="inline-block w-full px-4 my-auto">
-            <input type="checkbox" name="<%= task.id %>" id="<%= task.id %>" <%= if task.done, do: "checked" %>>
-            <span class="w-full ml-2"><%= task.text %></span>
-          </label>
-        </li>
+        <form phx-change="toggle-task">
+          <%= for task <- @tasks do%>
+          <li class="flex w-full h-8 hover:bg-gray-100">
+            <label for="<%= task.id %>" class="inline-block w-full px-4 my-auto">
+              <input type="checkbox" name="<%= task.id %>" id="<%= task.id %>" <%= if task.done, do: "checked" %>>
+              <span class="w-full ml-2 <%= if task.done, do: "line-through" %>"><%= task.text %></span>
+            </label>
+          </li>
+          <% end %>
+        </form>
+        <%= if @new_task do %>
+          <form phx-submit="create-task">
+            <li class="flex h-8">
+              <input type="text"
+                     name="new_task"
+                     id="new_task"
+                     autocomplete="off"
+                     class="w-full px-4 border-t border-b focus:border-blue-400">
+            </li>
+          </form>
         <% end %>
+        <li class="flex px-4 py-2 text-white text-gray-500 hover:bg-gray-100">
+          <button class="my-auto" phx-click="toggle-task-input" type="button">
+            + Create new task
+          </button>
+        </li>
       </ul>
-    </form>
   </div>
 </div>
-

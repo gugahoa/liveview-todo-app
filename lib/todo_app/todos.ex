@@ -18,7 +18,9 @@ defmodule TodoApp.Todos do
 
   """
   def list_tasks do
-    Repo.all(Task)
+    Task
+    |> order_by([c], asc: c.done, asc: c.updated_at)
+    |> Repo.all()
   end
 
   @doc """
