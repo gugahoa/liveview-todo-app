@@ -13,19 +13,17 @@
           </li>
           <% end %>
         </form>
-        <%= if @new_task do %>
-          <form phx-submit="create-task">
-            <li class="flex h-8">
-              <input type="text"
-                     name="new_task"
-                     id="new_task"
-                     autocomplete="off"
-                     class="w-full px-4 border-t border-b focus:border-blue-400">
-            </li>
+        <li x-data="{ show: false, text: '' }" phx-update="ignore" class="w-full">
+          <form phx-submit="create-task" x-show="show">
+            <input type="text"
+                   name="new_task"
+                   id="new_task"
+                   autocomplete="off"
+                   x-ref="todo_input"
+                   x-model="text"
+                   class="w-full h-8 px-4 border-t border-b focus:border-blue-400">
           </form>
-        <% end %>
-        <li class="flex px-4 py-2 text-white text-gray-500 hover:bg-gray-100">
-          <button class="my-auto" phx-click="toggle-task-input" type="button">
+          <button class="w-full px-4 py-2 my-auto hover:bg-gray-100" type="button" @click="show = true; $nextTick(() => $refs.todo_input.focus())">
             + Create new task
           </button>
         </li>
