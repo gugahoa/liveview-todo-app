@@ -13,19 +13,14 @@
           </li>
           <% end %>
         </form>
-        <li x-data="{ show: false, text: '' }" phx-update="ignore" class="w-full">
-          <form phx-submit="create-task" x-show="show">
-            <input type="text"
-                   name="new_task"
-                   id="new_task"
-                   autocomplete="off"
-                   x-ref="todo_input"
-                   x-model="text"
-                   class="w-full h-8 px-4 border-t border-b focus:border-blue-400">
+        <li>
+          <%= f = form_for @changeset, "#", [phx_change: "validate", phx_submit: "create-task"] %>
+            <%= text_input f, :text, class: "px-4 w-full h-8 border-t border-b focus:border-blue-500", autofocus: true %>
+            <%= error_tag f, :text, class: "px-4" %>
+            <button class="w-full px-4 py-2 my-auto hover:bg-gray-100">
+              + Create new task
+            </button>
           </form>
-          <button class="w-full px-4 py-2 my-auto hover:bg-gray-100" type="button" @click="show = true; $nextTick(() => $refs.todo_input.focus())">
-            + Create new task
-          </button>
         </li>
       </ul>
   </div>

@@ -8,10 +8,15 @@ defmodule TodoAppWeb.ErrorHelpers do
   @doc """
   Generates tag for inlined form input errors.
   """
-  def error_tag(form, field) do
+  def error_tag(form, field, opts \\ []) do
     Enum.map(Keyword.get_values(form.errors, field), fn error ->
       content_tag(:span, translate_error(error),
-        class: "invalid-feedback",
+        class:
+          if classes = Keyword.get(opts, :class, "") do
+            "invalid-feedback #{classes}"
+          else
+            "invalid-feedback"
+          end,
         phx_feedback_for: input_id(form, field)
       )
     end)

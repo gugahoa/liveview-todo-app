@@ -2,10 +2,15 @@ defmodule TodoAppWeb.TaskLive.Index do
   use TodoAppWeb, :live_view
 
   alias TodoApp.Todos
+  alias TodoApp.Todos.Task
 
   @impl true
   def mount(_params, _session, socket) do
-    {:ok, assign(socket, tasks: fetch_tasks(), new_task: false)}
+    {:ok,
+     assign(socket,
+       tasks: fetch_tasks(),
+       changeset: Todos.change_task(%Task{})
+     )}
   end
 
   @impl true
@@ -17,13 +22,27 @@ defmodule TodoAppWeb.TaskLive.Index do
     end
   end
 
-  def handle_event("create-task", %{"new_task" => text}, socket) do
-    Todos.create_task(%{text: text})
-    {:noreply, assign(socket, tasks: fetch_tasks(), new_task: false)}
+  def handle_event("create-task", %{"task" => task}, socket) do
+    case Todos.create_task(task) do
+      {:ok, _} ->
+        {:noreply,
+         assign(socket,
+           tasks: fetch_tasks(),
+           changeset: Todos.change_task(%Task{})
+         )}
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, changeset: changeset)}
+    end
   end
 
-  def handle_event("toggle-task-input", _, socket) do
-    {:noreply, assign(socket, new_task: true)}
+  def handle_event("validate", %{"task" => task}, socket) do
+    changeset =
+      %Task{}
+      |> Todos.change_task(task)
+      |> Map.put(:action, :insert)
+
+    {:noreply, assign(socket, :changeset, changeset)}
   end
 
   defp fetch_tasks do
